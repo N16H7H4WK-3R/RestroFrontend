@@ -45,7 +45,7 @@ function Specials() {
 
     return (
         <>
-            <div class="alert alert-success text-center text-bold" role="alert">
+            <div className="alert alert-success text-center text-bold" role="alert">
                 Exciting Offers!!!!!!! Order now....
             </div>
             <div className="hero2 p-3 border mb-5">
