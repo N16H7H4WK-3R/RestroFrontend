@@ -5,6 +5,12 @@ import About from "./components/About";
 import BookingForm from "./components/BookingForm";
 import ConfirmedBooking from "./components/ConfirmedBooking";
 import { fetchAPI, submitAPI } from "./components/Api";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Login from "./components/UserAuth/login";
+import Profile from "./components/UserAuth/profile";
+import Signup from "./components/UserAuth/signup"
+
 
 const timesReducer = (state, action) => {
   switch (action.type) {
@@ -46,18 +52,29 @@ const App = () => {
       <Router>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/user-profile" element={<><Header /> <Profile /> <Footer /> </>} />
+          <Route path="/about" element={<><Header /><About /><Footer /></>} />
           <Route
             path="/booking"
             element={
-              <BookingForm
-                availableTimes={availableTimes}
-                dispatch={dispatch}
-                submitForm={submitForm} // Pass the submitForm function
-              />
+              <>
+                <Header />
+                <BookingForm
+                  availableTimes={availableTimes}
+                  dispatch={dispatch}
+                  submitForm={submitForm}
+                />
+                <Footer />
+              </>
             }
           />
-          <Route path="/confirmed" element={<ConfirmedBooking />} />
+          <Route path="/confirmed" element={<>
+            <Header />
+            <ConfirmedBooking />
+            <Footer />
+          </>} />
         </Routes>
       </Router>
     </>
