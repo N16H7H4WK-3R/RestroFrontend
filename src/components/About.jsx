@@ -44,8 +44,7 @@ const About = () => {
               animation: 'fadeIn 2s ease-out',
             }}
           >
-            <strong>Based in Chicago, Illinois,</strong> Little Lemon is a family-owned Mediterranean restaurant, focused on traditional recipes served with a modern twist. The chefs draw inspiration from Italian, Greek, and Turkish culture, offering a rotating menu of 12–15 seasonal dishes. The rustic and relaxed atmosphere paired with moderate prices makes it a popular destination for meals at any time of the day.
-          </p>
+            <strong>Based in Kanpur, India,</strong> Restro Book is a family-owned Indian restaurant focused on traditional recipes served with a modern twist. The chefs draw inspiration from North Indian, South Indian, and Mughlai cuisines, offering a rotating menu of 12–15 seasonal dishes. The warm and inviting atmosphere, paired with moderate prices, makes it a favorite destination for meals at any time of the day.</p>
           <div
             className="about-details"
             style={{
@@ -61,7 +60,7 @@ const About = () => {
                 animation: 'fadeIn 2.5s ease-out',
               }}
             >
-              Little Lemon is owned by two Italian brothers, Mario and Adrian, who moved to the United States to pursue their shared dream of owning a restaurant.
+              Restro Book is owned by two brothers, Arjun and Rohan, who grew up in Kanpur and pursued their dream of owning a restaurant that celebrates Indian culinary heritage.
             </p>
             <p
               className="about-text"
@@ -72,7 +71,7 @@ const About = () => {
                 animation: 'fadeIn 2.5s ease-out',
               }}
             >
-              To craft the menu, Mario relies on family recipes and his experience as a chef in Italy. Adrian does all the marketing for the restaurant and led the effort to expand the menu beyond classic Italian to incorporate additional cuisines from the Mediterranean region.
+              To craft the menu, Arjun relies on family recipes and his experience as a chef working in prominent Indian kitchens. Rohan handles all the marketing for the restaurant and led the effort to expand the menu beyond traditional North Indian fare to include diverse flavors from across India.
             </p>
           </div>
         </div>
