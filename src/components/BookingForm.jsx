@@ -100,13 +100,47 @@ function BookingForm() {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();  // Ensure the default form submit action is prevented
-    console.log("button clicked");  // Check if this logs to the console
-    if (!validateForm()) return;
-    console.log("Form is valid, submitting...");
+    event.preventDefault(); // Prevent default form submission
+    console.log("button clicked"); // Ensure this logs
 
-    submitBooking(formData, username, formData.time);
-    navigate("/confirmed");  // Navigate immediately after form submission
+    // Validate the form
+    if (!validateForm()) return;
+
+    console.log("validated"); // Ensure this logs
+
+    // Construct the API request payload
+    const bookingDate = `${formData.date}T${formData.time}:00+05:30`; // Create the required datetime format
+    const requestBody = {
+      name: `${username}'s ${formData.occasion}`,
+      no_of_guests: formData.numberOfTables,
+      booking_date: bookingDate,
+    };
+
+    console.log("Request Body: ", requestBody); // Debug the request payload
+
+    // Make the API request
+    axios
+      .post(
+        "https://restrobackend-kbfs.onrender.com/restaurant/booking/tables/",
+        requestBody,
+        {
+          headers: {
+            Authorization: `Token ${AUTH_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status === 201) {
+          console.log("Booking Submitted Successfully");
+          navigate("/confirmed"); // Navigate to confirmation page
+        } else {
+          console.log("Unexpected response status:", response.status);
+        }
+      })
+      .catch((error) => {
+        console.error("Error submitting booking:", error.response?.data || error.message);
+      });
   };
 
   const handleChange = (e) => {
