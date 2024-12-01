@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL, AUTH_TOKEN, fetchAPI } from "./Api";
-
-
+import axios from "axios";
 
 // Function to fetch user data
 const fetchUserData = async () => {
@@ -16,7 +15,7 @@ const fetchUserData = async () => {
   return data.username;
 };
 
-// Function to submit booking data
+// Function to submit booking data using Axios
 const submitBooking = async (formData, username, selectedTime) => {
   const bookingDate = `${formData.date}T${selectedTime}:00+05:30`; // Create the required datetime format
 
@@ -26,21 +25,28 @@ const submitBooking = async (formData, username, selectedTime) => {
     booking_date: bookingDate,
   };
 
-  const response = await fetch(`${API_BASE_URL}/restaurant/booking/tables/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Token ${AUTH_TOKEN}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestBody),
-  });
+  try {
+    const response = await axios.post(
+      "https://restrobackend-kbfs.onrender.com/restaurant/booking/tables/",
+      requestBody,
+      {
+        headers: {
+          Authorization: `Token ${AUTH_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  if (!response.ok) {
-    console.error("Error submitting booking:", await response.text());
+    if (response.status === 201) {
+      // Successfully submitted the booking
+      return true;
+    }
+  } catch (error) {
+    console.error("Error submitting booking:", error.response?.data || error.message);
     return false;
   }
 
-  return true;
+  return false;
 };
 
 function BookingForm() {
