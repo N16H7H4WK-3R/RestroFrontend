@@ -1,6 +1,47 @@
-import React, { useState } from "react";
-import { fetchAPI, submitAPI } from "./Api";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL, AUTH_TOKEN } from "./Api";
+
+
+
+// Function to fetch user data
+const fetchUserData = async () => {
+  const response = await fetch(`${API_BASE_URL}/auth/users/me`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+    },
+  });
+  const data = await response.json();
+  return data.username;
+};
+
+// Function to submit booking data
+const submitBooking = async (formData, username, selectedTime) => {
+  const bookingDate = `${formData.date}T${selectedTime}:00+05:30`; // Create the required datetime format
+
+  const requestBody = {
+    name: `${username}'s ${formData.occasion}`,
+    no_of_guests: formData.numberOfTables, // Assuming numberOfTables is the number of guests
+    booking_date: bookingDate,
+  };
+
+  const response = await fetch(`${API_BASE_URL}/restaurant/booking/tables/`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${AUTH_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) {
+    console.error("Error submitting booking:", await response.text());
+    return false;
+  }
+
+  return true;
+};
 
 function BookingForm() {
   const [formData, setFormData] = useState({
@@ -15,7 +56,17 @@ function BookingForm() {
 
   const [formErrors, setFormErrors] = useState({});
   const [availableTimes, setAvailableTimes] = useState([]);
+  const [username, setUsername] = useState(""); // Store the fetched username
   const navigate = useNavigate();
+
+  // Fetch username when component mounts
+  useEffect(() => {
+    const getUserData = async () => {
+      const fetchedUsername = await fetchUserData();
+      setUsername(fetchedUsername);
+    };
+    getUserData();
+  }, []);
 
   const validateForm = () => {
     const errors = {};
@@ -45,7 +96,7 @@ function BookingForm() {
     event.preventDefault();
     if (!validateForm()) return;
 
-    const isSubmitted = await submitAPI(formData);
+    const isSubmitted = await submitBooking(formData, username, formData.time);
     if (isSubmitted) {
       navigate("/confirmed");
     } else {
@@ -106,34 +157,17 @@ function BookingForm() {
               <h4 className="mb-3 text-primary">Billing and Details</h4>
               <form className="needs-validation" onSubmit={handleSubmit} noValidate>
                 <div className="row g-3">
-                  <div className="col-sm-6">
-                    <label htmlFor="firstName" className="form-label">
-                      First name
+                  <div className="col-sm-12">
+                    <label htmlFor="username" className="form-label">
+                      Username
                     </label>
                     <input
                       type="text"
                       className="form-control"
-                      id="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      required
+                      id="username"
+                      value={username}
+                      disabled
                     />
-                    {formErrors.firstName && <div className="text-danger">{formErrors.firstName}</div>}
-                  </div>
-
-                  <div className="col-sm-6">
-                    <label htmlFor="lastName" className="form-label">
-                      Last name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      required
-                    />
-                    {formErrors.lastName && <div className="text-danger">{formErrors.lastName}</div>}
                   </div>
 
                   <div className="col-12">
@@ -145,10 +179,8 @@ function BookingForm() {
                       className="form-control"
                       id="email"
                       value={formData.email}
-                      onChange={handleChange}
-                      required
+                      disabled
                     />
-                    {formErrors.email && <div className="text-danger">{formErrors.email}</div>}
                   </div>
 
                   <hr className="mb-3 mt-5" />
@@ -218,18 +250,20 @@ function BookingForm() {
                       required
                     >
                       <option value="">Select an occasion...</option>
-                      <option value="Anniversary">Anniversary</option>
                       <option value="Birthday">Birthday</option>
+                      <option value="Anniversary">Anniversary</option>
                       <option value="Business">Business</option>
+                      <option value="Other">Other</option>
                     </select>
                     {formErrors.occasion && <div className="text-danger">{formErrors.occasion}</div>}
                   </div>
-                </div>
 
-                <hr className="my-5" />
-                <button className="w-100 btn btn-primary btn-lg" type="submit">
-                  Continue to checkout
-                </button>
+                  <div className="col-12">
+                    <button className="btn btn-primary w-100" type="submit">
+                      Confirm Booking
+                    </button>
+                  </div>
+                </div>
               </form>
             </div>
           </div>

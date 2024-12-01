@@ -1,6 +1,11 @@
 // Downloaded the JavaScript file instead of putting it in index.html to avoid browser issues.
 // <script src="https://raw.githubusercontent.com/Meta-Front-End-Developer-PC/capstone/master/api.js"></script>
 
+
+export const API_BASE_URL = "https://restrobackend-kbfs.onrender.com";
+
+export const AUTH_TOKEN = localStorage.getItem('token');
+
 export const seededRandom = function (seed) {
   var m = 2 ** 35 - 31;
   var a = 185852;
@@ -9,6 +14,7 @@ export const seededRandom = function (seed) {
     return (s = (s * a) % m) / m;
   };
 };
+
 
 export const fetchAPI = async function (dateTime) {
   try {
@@ -56,16 +62,7 @@ export const fetchAPI = async function (dateTime) {
 
 export const submitAPI = async function (formData) {
   try {
-    // Simulate an asynchronous API call with a delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Perform any necessary validation or data processing here
-    // ...
-
-    // Simulate a random success/failure
-    const isSuccess = Math.random() < 0.8; // 80% success rate
-
-    // Return true if the data was successfully submitted, otherwise false
+    console.log(formData)
     return isSuccess;
   } catch (error) {
     console.error('Error submitting API:', error);
