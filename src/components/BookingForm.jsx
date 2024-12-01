@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL, AUTH_TOKEN } from "./Api";
+import { API_BASE_URL, AUTH_TOKEN, fetchAPI } from "./Api";
 
 
 
