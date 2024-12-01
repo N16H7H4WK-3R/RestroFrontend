@@ -101,23 +101,19 @@ function BookingForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent default form submission
-    console.log("button clicked"); // Ensure this logs
 
     // Validate the form
     // if (!validateForm()) return;
 
-    console.log("validated"); // Ensure this logs
 
-    // Construct the API request payload
-    const bookingDate = `${formData.date}T${formData.time}:00+05:30`; // Removed timezone if unnecessary
-    console.log("Formatted Booking Date:", bookingDate);
+    const [startTime] = formData.time.split(" - ");
+
+    const bookingDate = `${formData.date}T${startTime}:00+05:30`;
     const requestBody = {
       name: `${username}'s ${formData.occasion}`,
       no_of_guests: formData.numberOfTables,
       booking_date: bookingDate,
     };
-
-    console.log("Request Body: ", requestBody); // Debug the request payload
 
     // Make the API request
     axios
