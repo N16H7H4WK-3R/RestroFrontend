@@ -16,7 +16,7 @@ const fetchUserData = async () => {
 };
 
 // Function to submit booking data using Axios
-const submitBooking = async (formData, username, selectedTime) => {
+const submitBooking = (formData, username, selectedTime) => {
   const bookingDate = `${formData.date}T${selectedTime}:00+05:30`; // Create the required datetime format
 
   const requestBody = {
@@ -27,8 +27,9 @@ const submitBooking = async (formData, username, selectedTime) => {
 
   console.log("Request Body: ", requestBody);
 
-  try {
-    const response = await axios.post(
+  // Directly submit the form data (no async wait for now)
+  axios
+    .post(
       "https://restrobackend-kbfs.onrender.com/restaurant/booking/tables/",
       requestBody,
       {
@@ -37,18 +38,16 @@ const submitBooking = async (formData, username, selectedTime) => {
           "Content-Type": "application/json",
         },
       }
-    );
-
-    if (response.status === 201) {
-      // Successfully submitted the booking
-      return true;
-    }
-  } catch (error) {
-    console.error("Error submitting booking:", error.response?.data || error.message);
-    return false;
-  }
-
-  return false;
+    )
+    .then((response) => {
+      if (response.status === 201) {
+        // Successfully submitted the booking
+        console.log("Booking Submitted Successfully");
+      }
+    })
+    .catch((error) => {
+      console.error("Error submitting booking:", error.response?.data || error.message);
+    });
 };
 
 function BookingForm() {
@@ -100,18 +99,14 @@ function BookingForm() {
     setAvailableTimes(times);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();  // Ensure the default form submit action is prevented
     console.log("button clicked");  // Check if this logs to the console
     if (!validateForm()) return;
     console.log("Form is valid, submitting...");
 
-    const isSubmitted = await submitBooking(formData, username, formData.time);
-    if (isSubmitted) {
-      navigate("/confirmed");
-    } else {
-      console.log("Error submitting form");
-    }
+    submitBooking(formData, username, formData.time);
+    navigate("/confirmed");  // Navigate immediately after form submission
   };
 
   const handleChange = (e) => {
