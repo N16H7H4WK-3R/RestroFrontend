@@ -25,7 +25,7 @@ const submitBooking = async (formData, username, selectedTime) => {
     booking_date: bookingDate,
   };
 
-  console.log(requestBody);
+  console.log("Request Body: ", requestBody);
 
   try {
     const response = await axios.post(
@@ -101,9 +101,11 @@ function BookingForm() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault();  // Ensure the default form submit action is prevented
+    console.log("button clicked");  // Check if this logs to the console
     if (!validateForm()) return;
-    console.log("button clicked");
+    console.log("Form is valid, submitting...");
+
     const isSubmitted = await submitBooking(formData, username, formData.time);
     if (isSubmitted) {
       navigate("/confirmed");
@@ -218,52 +220,50 @@ function BookingForm() {
                       id="numberOfTables"
                       value={formData.numberOfTables}
                       onChange={handleChange}
-                      min={1}
-                      max={24}
                       required
                     />
                     {formErrors.numberOfTables && <div className="text-danger">{formErrors.numberOfTables}</div>}
                   </div>
 
-                  <div className="col-md-6">
-                    <label htmlFor="time" className="form-label">
-                      Time Period
-                    </label>
-                    <select
-                      className="form-select"
-                      id="time"
-                      value={formData.time}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select a booking time period...</option>
-                      {availableTimes.map((time) => (
-                        <option key={time} value={time}>
-                          {time}
-                        </option>
-                      ))}
-                    </select>
-                    {formErrors.time && <div className="text-danger">{formErrors.time}</div>}
-                  </div>
-
-                  <div className="col-md-6">
+                  <div className="col-md-12">
                     <label htmlFor="occasion" className="form-label">
                       Occasion
                     </label>
                     <select
-                      className="form-select"
+                      className="form-control"
                       id="occasion"
                       value={formData.occasion}
                       onChange={handleChange}
                       required
                     >
-                      <option value="">Select an occasion...</option>
-                      <option value="Birthday">Birthday</option>
-                      <option value="Anniversary">Anniversary</option>
-                      <option value="Business">Business</option>
-                      <option value="Other">Other</option>
+                      <option value="">Choose...</option>
+                      <option value="birthday">Birthday</option>
+                      <option value="anniversary">Anniversary</option>
+                      <option value="business">Business</option>
+                      <option value="others">Others</option>
                     </select>
                     {formErrors.occasion && <div className="text-danger">{formErrors.occasion}</div>}
+                  </div>
+
+                  <div className="col-md-12">
+                    <label htmlFor="time" className="form-label">
+                      Time of Booking
+                    </label>
+                    <select
+                      className="form-control"
+                      id="time"
+                      value={formData.time}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Choose...</option>
+                      {availableTimes.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
+                    {formErrors.time && <div className="text-danger">{formErrors.time}</div>}
                   </div>
 
                   <div className="col-12">
