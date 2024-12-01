@@ -104,7 +104,7 @@ function BookingForm() {
     console.log("button clicked"); // Ensure this logs
 
     // Validate the form
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
 
     console.log("validated"); // Ensure this logs
 
