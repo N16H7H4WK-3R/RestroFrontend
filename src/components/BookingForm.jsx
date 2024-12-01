@@ -6,10 +6,10 @@ import { API_BASE_URL, AUTH_TOKEN } from "./Api";
 
 // Function to fetch user data
 const fetchUserData = async () => {
-  const response = await fetch(`${API_BASE_URL}/auth/users/me`, {
+  const response = await fetch(`${API_BASE_URL}/auth/users/me/`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Authorization: `Token ${AUTH_TOKEN}`,
     },
   });
   const data = await response.json();
@@ -29,7 +29,7 @@ const submitBooking = async (formData, username, selectedTime) => {
   const response = await fetch(`${API_BASE_URL}/restaurant/booking/tables/`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${AUTH_TOKEN}`,
+      Authorization: `Token ${AUTH_TOKEN}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(requestBody),

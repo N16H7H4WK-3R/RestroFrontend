@@ -28,8 +28,8 @@ function Profile() {
     const updateProfile = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(
-                `${API_BASE_URL}/auth/users/`,
+            const response = await axios.patch(
+                `${API_BASE_URL}/auth/users/me/`,
                 { email: updatedEmail },
                 {
                     headers: {
