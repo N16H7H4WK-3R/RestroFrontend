@@ -25,6 +25,8 @@ const submitBooking = async (formData, username, selectedTime) => {
     booking_date: bookingDate,
   };
 
+  console.log(requestBody);
+
   try {
     const response = await axios.post(
       "https://restrobackend-kbfs.onrender.com/restaurant/booking/tables/",
@@ -101,7 +103,7 @@ function BookingForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validateForm()) return;
-
+    console.log("button clicked");
     const isSubmitted = await submitBooking(formData, username, formData.time);
     if (isSubmitted) {
       navigate("/confirmed");
