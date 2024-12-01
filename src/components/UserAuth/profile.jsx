@@ -11,7 +11,7 @@ function Profile() {
     const fetchProfile = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${API_BASE_URL}/auth/users/me`, {
+            const response = await axios.get(`${API_BASE_URL}/auth/users/me/`, {
                 headers: {
                     Authorization: `Token ${AUTH_TOKEN}`,
                 },
