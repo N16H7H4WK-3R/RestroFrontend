@@ -109,7 +109,8 @@ function BookingForm() {
     console.log("validated"); // Ensure this logs
 
     // Construct the API request payload
-    const bookingDate = `${formData.date}T${formData.time}:00+05:30`; // Create the required datetime format
+    const bookingDate = `${formData.date}T${formData.time}:00`; // Removed timezone if unnecessary
+    console.log("Formatted Booking Date:", bookingDate);
     const requestBody = {
       name: `${username}'s ${formData.occasion}`,
       no_of_guests: formData.numberOfTables,
