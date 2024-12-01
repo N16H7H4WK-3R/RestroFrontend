@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { API_BASE_URL, AUTH_TOKEN } from "../Api";
 
 function Profile() {
@@ -10,18 +11,15 @@ function Profile() {
     const fetchProfile = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${API_BASE_URL}/auth/users/me`, {
-                method: "GET",
+            const response = await axios.get(`${API_BASE_URL}/auth/users/me`, {
                 headers: {
                     Authorization: `Token ${AUTH_TOKEN}`,
                 },
             });
-            if (!response.ok) throw new Error("Failed to fetch profile.");
-            const data = await response.json();
-            setProfile(data);
-            setUpdatedEmail(data.email);
+            setProfile(response.data);
+            setUpdatedEmail(response.data.email);
         } catch (err) {
-            setError(err.message);
+            setError(err.response ? err.response.data : err.message);
         } finally {
             setLoading(false);
         }
@@ -30,20 +28,20 @@ function Profile() {
     const updateProfile = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/users/`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Token ${AUTH_TOKEN}`,
-                },
-                body: JSON.stringify({ email: updatedEmail }),
-            });
-            if (!response.ok) throw new Error("Failed to update profile.");
-            const data = await response.json();
-            setProfile(data);
+            const response = await axios.put(
+                `${API_BASE_URL}/auth/users/`,
+                { email: updatedEmail },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Token ${AUTH_TOKEN}`,
+                    },
+                }
+            );
+            setProfile(response.data);
             alert("Profile updated successfully!");
         } catch (err) {
-            setError(err.message);
+            setError(err.response ? err.response.data : err.message);
         }
     };
 
@@ -56,14 +54,18 @@ function Profile() {
             <div
                 className="container-fluid text-dark vh-100 d-flex flex-column justify-content-center align-items-center bg-light"
                 style={{
-                    backgroundImage: "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWlb6K53Vi1u5IVwiw_1EYmAH1qFBhXBAp7A&s')",
+                    backgroundImage:
+                        "url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWlb6K53Vi1u5IVwiw_1EYmAH1qFBhXBAp7A&s')",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundAttachment: "fixed",
                 }}
             >
                 <div className="container col-xl-12 col-xxl-8">
-                    <div className="row align-items-center g-2 p-5 bg-white shadow" style={{ borderRadius: "1rem" }}>
+                    <div
+                        className="row align-items-center g-2 p-5 bg-white shadow"
+                        style={{ borderRadius: "1rem" }}
+                    >
                         {loading ? (
                             <div className="text-center">
                                 <div className="spinner-border text-primary" role="status">
@@ -76,7 +78,6 @@ function Profile() {
                             <>
                                 {/* Left Section */}
                                 <div className="col-lg-7 container-fluid text-center text-lg-start">
-                                    {/* Profile Picture */}
                                     <div className="text-center mb-4">
                                         <div
                                             className="rounded-circle overflow-hidden border border-primary border-4 shadow"
